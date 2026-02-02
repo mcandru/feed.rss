@@ -7,4 +7,5 @@
 5. Created initial working version of the app: https://opncd.ai/share/W3d6OPwz
 6. Mistake: Tried adding in some ugly "Hacker news" if statements to handle formatting exceptions. Did a rollback on the changes.
 7. Added greyed out visited links using opencode
-8.
+8. Moved to tailwind CSS using opencode to do the refactor
+9. Manually added smart defaults for feeds of authors that I commonly read
