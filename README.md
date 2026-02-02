@@ -12,6 +12,6 @@ Inspired by this tweet from Andrej Karpathy, the goal of the feed reader is to h
 - Vercel for deployment
 - Vercel serverless function for CORS proxy for RSS feeds
 
-## Deployment
+## Deployment
 
 https://feed-rss-bay.vercel.app/
