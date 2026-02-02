@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import AppHeader from './components/AppHeader.vue'
-import FeedFilters from './components/FeedFilters.vue'
-import ArticleList from './components/ArticleList.vue'
-import ManageFeedsModal from './components/ManageFeedsModal.vue'
-import SharePreview from './components/SharePreview.vue'
-import { useFeed } from './composables/useFeed'
-import type { Feed } from './types'
+import { ref, onMounted } from "vue";
+import AppHeader from "./components/AppHeader.vue";
+import FeedFilters from "./components/FeedFilters.vue";
+import ArticleList from "./components/ArticleList.vue";
+import ManageFeedsModal from "./components/ManageFeedsModal.vue";
+import SharePreview from "./components/SharePreview.vue";
+import { useFeed } from "./composables/useFeed";
+import type { Feed } from "./types";
 
 const {
   feeds,
@@ -19,26 +19,26 @@ const {
   addFeed,
   deleteFeed,
   refreshFeeds,
-  setFilter
-} = useFeed()
+  setFilter,
+} = useFeed();
 
-const showManageModal = ref(false)
+const showManageModal = ref(false);
 
 function openManageModal() {
-  showManageModal.value = true
+  showManageModal.value = true;
 }
 
 function handleAddFeed(feed: Feed) {
-  addFeed(feed)
+  addFeed(feed);
 }
 
 function handleDeleteFeed(url: string) {
-  deleteFeed(url)
+  deleteFeed(url);
 }
 
 onMounted(() => {
-  initializeApp()
-})
+  initializeApp();
+});
 </script>
 
 <template>
@@ -47,12 +47,9 @@ onMounted(() => {
 
   <!-- Normal app mode -->
   <div v-else class="min-h-screen">
-    <AppHeader
-      @manage="openManageModal"
-      @refresh="refreshFeeds"
-    />
+    <AppHeader @manage="openManageModal" @refresh="refreshFeeds" />
 
-    <main class="max-w-[900px] mx-auto p-8 sm:p-5 sm:px-5">
+    <main class="max-w-[900px] mx-auto p-8 sm:p-5 sm:px-5 w-full">
       <FeedFilters
         :sources="sources"
         :active-filter="activeFilter"

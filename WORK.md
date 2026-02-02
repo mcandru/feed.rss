@@ -13,3 +13,4 @@
 11. Deployed to vercel using opencode to guide. Worked well but found a limitation of the CORS proxy services that I was using.
 12. Found an issue where `corsproxy.io` is limited to development, had to pay for API key to use in production. Created a Vercel serverless function to proxy RSS feed requests through it instead but got caught up on getting the vercel dev environment playing nicely with the Vite dev server for serving the frontend locally. Opted instead to use `corsproxy.io` in dev environment: https://opncd.ai/share/tIVeUpFE. Not the best solution but it works.
 13. Updated the favicon. Had to do a few iterations to get the colour scheme and style to match what I wanted: https://opncd.ai/share/pVRh72gO
+14. Found some responsiveness issues with the share screen. Found that it struggled making the correct CSS changes to fix the issue. Had to manually fix the issue: https://opncd.ai/share/9L5IHjBN
