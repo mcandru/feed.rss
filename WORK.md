@@ -6,3 +6,5 @@
 4. Manually scaffolded the Vue app using `npm create vite@latest . -- --template vue-ts`
 5. Created initial working version of the app: https://opncd.ai/share/W3d6OPwz
 6. Mistake: Tried adding in some ugly "Hacker news" if statements to handle formatting exceptions. Did a rollback on the changes.
+7. Added greyed out visited links using opencode
+8.

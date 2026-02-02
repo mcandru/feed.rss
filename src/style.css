@@ -1,140 +1,91 @@
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=IBM+Plex+Sans:wght@400;500&display=swap');
+@import "tailwindcss";
 
-:root {
-  --bg: #FAF8F5;
-  --bg-elevated: #FFFFFF;
-  --text-primary: #1A1A1A;
-  --text-secondary: #6B6B6B;
-  --text-tertiary: #9A9A9A;
-  --accent: #C45D3A;
-  --accent-hover: #A84D2F;
-  --border: #E8E4DF;
-  --border-hover: #D4CFC8;
-  --shadow: rgba(26, 26, 26, 0.06);
-  --shadow-lg: rgba(26, 26, 26, 0.12);
-
+@theme {
   --font-sans: 'IBM Plex Sans', -apple-system, sans-serif;
   --font-serif: 'Fraunces', Georgia, serif;
+
+  --color-bg: #FAF8F5;
+  --color-bg-elevated: #FFFFFF;
+  --color-text-primary: #1A1A1A;
+  --color-text-secondary: #6B6B6B;
+  --color-text-tertiary: #9A9A9A;
+  --color-accent: #C45D3A;
+  --color-accent-hover: #A84D2F;
+  --color-border: #E8E4DF;
+  --color-border-hover: #D4CFC8;
+  --color-shadow: rgba(26, 26, 26, 0.06);
+  --color-shadow-lg: rgba(26, 26, 26, 0.12);
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@layer base {
+  body {
+    @apply font-sans bg-bg text-text-primary leading-relaxed min-h-screen;
+  }
+
+  #app {
+    @apply min-h-screen;
+  }
+
+  a {
+    @apply text-inherit no-underline;
+  }
+
+  a:hover {
+    @apply text-accent;
+  }
 }
 
-body {
-  font-family: var(--font-sans);
-  background: var(--bg);
-  color: var(--text-primary);
-  line-height: 1.6;
-  min-height: 100vh;
+@layer components {
+  .btn {
+    @apply font-sans text-sm font-medium py-2.5 px-4 rounded-lg border-none cursor-pointer transition-all duration-200 inline-flex items-center gap-2;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-text-secondary;
+  }
+
+  .btn-ghost:hover {
+    @apply bg-border text-text-primary;
+  }
+
+  .btn-primary {
+    @apply bg-accent text-white;
+  }
+
+  .btn-primary:hover {
+    @apply bg-accent-hover -translate-y-px shadow-lg;
+  }
+
+  .form-group {
+    @apply mb-5;
+  }
+
+  .form-label {
+    @apply block text-sm font-medium mb-2;
+  }
+
+  .form-input {
+    @apply w-full py-3 px-4 font-sans text-[0.9375rem] border border-border rounded-lg bg-bg text-text-primary transition-all duration-200;
+  }
+
+  .form-input:focus {
+    @apply outline-none border-accent ring-[3px] ring-accent/10;
+  }
+
+  .form-input::placeholder {
+    @apply text-text-tertiary;
+  }
+
+  .form-hint {
+    @apply text-[0.8125rem] text-text-tertiary mt-1.5;
+  }
+
+  .spinner {
+    @apply w-5 h-5 border-2 border-border border-t-accent rounded-full animate-spin;
+  }
 }
 
-#app {
-  min-height: 100vh;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-a:hover {
-  color: var(--accent);
-}
-
-/* Button base styles */
-.btn {
-  font-family: inherit;
-  font-size: 0.875rem;
-  font-weight: 500;
-  padding: 0.625rem 1rem;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.btn-ghost {
-  background: transparent;
-  color: var(--text-secondary);
-}
-
-.btn-ghost:hover {
-  background: var(--border);
-  color: var(--text-primary);
-}
-
-.btn-primary {
-  background: var(--accent);
-  color: white;
-}
-
-.btn-primary:hover {
-  background: var(--accent-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px var(--shadow-lg);
-}
-
-/* Form styles */
-.form-group {
-  margin-bottom: 1.25rem;
-}
-
-.form-label {
-  display: block;
-  font-size: 0.875rem;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-}
-
-.form-input {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  font-family: inherit;
-  font-size: 0.9375rem;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--bg);
-  color: var(--text-primary);
-  transition: all 0.2s ease;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(196, 93, 58, 0.1);
-}
-
-.form-input::placeholder {
-  color: var(--text-tertiary);
-}
-
-.form-hint {
-  font-size: 0.8125rem;
-  color: var(--text-tertiary);
-  margin-top: 0.375rem;
-}
-
-/* Loading spinner */
-.spinner {
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--border);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* Fade in animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -143,13 +94,5 @@ a:hover {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-/* Responsive */
-@media (max-width: 640px) {
-  .btn {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.8125rem;
   }
 }

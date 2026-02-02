@@ -8,10 +8,10 @@ defineEmits<{
 </script>
 
 <template>
-  <header class="header">
-    <div class="header-inner">
-      <div class="logo">Feed</div>
-      <div class="header-actions">
+  <header class="sticky top-0 bg-bg/90 border-b border-border z-[100] backdrop-blur-[10px]">
+    <div class="max-w-[900px] mx-auto py-5 px-8 flex justify-between items-center sm:py-4 sm:px-5">
+      <div class="font-serif text-2xl font-medium tracking-tight text-text-primary">Feed</div>
+      <div class="flex gap-2">
         <Button
           label="Manage"
           unstyled
@@ -42,42 +42,3 @@ defineEmits<{
     </div>
   </header>
 </template>
-
-<style scoped>
-.header {
-  position: sticky;
-  top: 0;
-  background: rgba(250, 248, 245, 0.9);
-  border-bottom: 1px solid var(--border);
-  z-index: 100;
-  backdrop-filter: blur(10px);
-}
-
-.header-inner {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 1.25rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo {
-  font-family: var(--font-serif);
-  font-size: 1.5rem;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  color: var(--text-primary);
-}
-
-.header-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-@media (max-width: 640px) {
-  .header-inner {
-    padding: 1rem 1.25rem;
-  }
-}
-</style>

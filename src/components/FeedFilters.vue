@@ -16,11 +16,16 @@ function setFilter(filter: string) {
 </script>
 
 <template>
-  <div class="feed-filters">
+  <div class="flex gap-2 mb-8 flex-wrap">
     <Button
       label="All"
       unstyled
-      :class="['filter-btn', { active: activeFilter === 'all' }]"
+      :class="[
+        'font-sans text-[0.8125rem] py-2 px-3.5 rounded-full border cursor-pointer transition-all duration-200',
+        activeFilter === 'all' 
+          ? 'bg-text-primary text-bg-elevated border-text-primary' 
+          : 'border-border bg-bg-elevated text-text-secondary hover:border-border-hover hover:text-text-primary'
+      ]"
       @click="setFilter('all')"
     />
     <Button
@@ -28,40 +33,13 @@ function setFilter(filter: string) {
       :key="source"
       :label="source"
       unstyled
-      :class="['filter-btn', { active: activeFilter === source }]"
+      :class="[
+        'font-sans text-[0.8125rem] py-2 px-3.5 rounded-full border cursor-pointer transition-all duration-200',
+        activeFilter === source 
+          ? 'bg-text-primary text-bg-elevated border-text-primary' 
+          : 'border-border bg-bg-elevated text-text-secondary hover:border-border-hover hover:text-text-primary'
+      ]"
       @click="setFilter(source)"
     />
   </div>
 </template>
-
-<style scoped>
-.feed-filters {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-}
-
-.filter-btn {
-  font-family: inherit;
-  font-size: 0.8125rem;
-  padding: 0.5rem 0.875rem;
-  border-radius: 100px;
-  border: 1px solid var(--border);
-  background: var(--bg-elevated);
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.filter-btn:hover {
-  border-color: var(--border-hover);
-  color: var(--text-primary);
-}
-
-.filter-btn.active {
-  background: var(--text-primary);
-  color: var(--bg-elevated);
-  border-color: var(--text-primary);
-}
-</style>

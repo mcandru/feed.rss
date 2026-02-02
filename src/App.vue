@@ -41,13 +41,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="app">
+  <div class="min-h-screen">
     <AppHeader
       @manage="openManageModal"
       @refresh="refreshFeeds"
     />
 
-    <main class="main">
+    <main class="max-w-[900px] mx-auto p-8 sm:p-5 sm:px-5">
       <FeedFilters
         :sources="sources"
         :active-filter="activeFilter"
@@ -69,21 +69,3 @@ onMounted(() => {
     />
   </div>
 </template>
-
-<style scoped>
-.app {
-  min-height: 100vh;
-}
-
-.main {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-@media (max-width: 640px) {
-  .main {
-    padding: 1.5rem 1.25rem;
-  }
-}
-</style>
