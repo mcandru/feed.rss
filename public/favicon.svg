@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Background circle -->
+  <circle cx="50" cy="50" r="48" fill="#C45D3A" stroke="#A84D2F" stroke-width="2"/>
+  
+  <!-- RSS icon in white -->
+  <!-- Small dot -->
+  <circle cx="30" cy="70" r="5" fill="#ffffff"/>
+  
+  <!-- First arc -->
+  <path d="M 30 55 A 15 15 0 0 1 45 70" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+  
+  <!-- Second arc -->
+  <path d="M 30 40 A 30 30 0 0 1 60 70" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+  
+  <!-- Third arc -->
+  <path d="M 30 25 A 45 45 0 0 1 75 70" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+</svg>
