@@ -1,10 +1,31 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import Button from 'primevue/button'
+import { useFeed } from '../composables/useFeed'
 
 defineEmits<{
   manage: []
   refresh: []
 }>()
+
+const { getShareUrl } = useFeed()
+
+const showCopied = ref(false)
+
+async function handleShare() {
+  const url = getShareUrl()
+  
+  try {
+    await navigator.clipboard.writeText(url)
+    showCopied.value = true
+    setTimeout(() => {
+      showCopied.value = false
+    }, 2000)
+  } catch {
+    // Fallback for browsers that don't support clipboard API
+    prompt('Copy this link to share your feeds:', url)
+  }
+}
 </script>
 
 <template>
@@ -12,6 +33,18 @@ defineEmits<{
     <div class="max-w-[900px] mx-auto py-5 px-8 flex justify-between items-center sm:py-4 sm:px-5">
       <div class="font-serif text-2xl font-medium tracking-tight text-text-primary">Feed</div>
       <div class="flex gap-2">
+        <Button
+          unstyled
+          class="btn btn-ghost relative"
+          @click="handleShare"
+        >
+          <template #icon>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 12v1a2 2 0 002 2h8a2 2 0 002-2v-1M8 3v9M12 7l-4-4-4 4"/>
+            </svg>
+          </template>
+          <span>{{ showCopied ? 'Copied!' : 'Share' }}</span>
+        </Button>
         <Button
           label="Manage"
           unstyled

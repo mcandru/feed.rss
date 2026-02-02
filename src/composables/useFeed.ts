@@ -1,5 +1,12 @@
 import { ref, computed } from "vue";
 import type { Feed, Article } from "../types";
+import {
+  isShareUrl,
+  getShareParam,
+  decodeFeeds,
+  clearShareParam,
+  generateShareUrl,
+} from "../utils/shareUrl";
 
 // CORS proxies with fallback
 const CORS_PROXIES = [
@@ -25,7 +32,72 @@ const loading = ref(false);
 const activeFilter = ref("all");
 const clickedLinks = ref<Set<string>>(new Set());
 
+// Share mode state
+const isShareMode = ref(false);
+const sharedFeeds = ref<Feed[]>([]);
+const shareError = ref<string | null>(null);
+
 export function useFeed() {
+  /**
+   * Initialize the app - checks for share URL first
+   * If share URL is detected, enters share mode and doesn't load localStorage
+   * Otherwise loads feeds from localStorage normally
+   */
+  async function initializeApp() {
+    if (isShareUrl()) {
+      const encoded = getShareParam();
+      if (encoded) {
+        const decoded = decodeFeeds(encoded);
+        if (decoded && decoded.length > 0) {
+          isShareMode.value = true;
+          sharedFeeds.value = decoded;
+          shareError.value = null;
+          // Load the shared feeds to show preview
+          await loadSharedFeeds();
+          return;
+        } else if (decoded && decoded.length === 0) {
+          shareError.value = "The shared link contains no feeds.";
+          isShareMode.value = true;
+          sharedFeeds.value = [];
+          return;
+        } else {
+          shareError.value = "The shared link is invalid or corrupted.";
+          isShareMode.value = true;
+          sharedFeeds.value = [];
+          return;
+        }
+      }
+    }
+
+    // Normal mode - load from localStorage
+    loadFeeds();
+    refreshFeeds();
+  }
+
+  /**
+   * Load and fetch articles from shared feeds for preview
+   */
+  async function loadSharedFeeds() {
+    loading.value = true;
+    articles.value = [];
+
+    const fetchPromises = sharedFeeds.value.map(async (feed) => {
+      try {
+        const text = await fetchWithProxy(feed.url);
+        return parseFeed(text, feed);
+      } catch (error) {
+        console.error(`Error fetching ${feed.name}:`, error);
+        return [];
+      }
+    });
+
+    const results = await Promise.all(fetchPromises);
+    articles.value = results
+      .flat()
+      .sort((a, b) => b.date.getTime() - a.date.getTime());
+    loading.value = false;
+  }
+
   // Load feeds from localStorage
   function loadFeeds() {
     const stored = localStorage.getItem(STORAGE_KEY);
@@ -191,6 +263,47 @@ export function useFeed() {
     return clickedLinks.value.has(link);
   }
 
+  /**
+   * Import selected feeds from share mode into localStorage
+   * Merges with existing feeds, skipping duplicates by URL
+   */
+  function importFeeds(feedsToImport: Feed[]) {
+    // Load current feeds from localStorage first
+    loadFeeds();
+
+    // Get existing URLs to avoid duplicates
+    const existingUrls = new Set(feeds.value.map((f) => f.url));
+
+    // Add only feeds that don't already exist
+    const newFeeds = feedsToImport.filter((f) => !existingUrls.has(f.url));
+    feeds.value = [...feeds.value, ...newFeeds];
+
+    // Save and exit share mode
+    saveFeeds();
+    exitShareMode();
+
+    return newFeeds.length;
+  }
+
+  /**
+   * Exit share mode and return to normal app view
+   */
+  function exitShareMode() {
+    clearShareParam();
+    isShareMode.value = false;
+    sharedFeeds.value = [];
+    shareError.value = null;
+    loadFeeds();
+    refreshFeeds();
+  }
+
+  /**
+   * Generate a shareable URL for current feeds
+   */
+  function getShareUrl(): string {
+    return generateShareUrl(feeds.value);
+  }
+
   return {
     feeds,
     articles,
@@ -198,6 +311,12 @@ export function useFeed() {
     activeFilter,
     sources,
     filteredArticles,
+    // Share mode
+    isShareMode,
+    sharedFeeds,
+    shareError,
+    // Methods
+    initializeApp,
     loadFeeds,
     addFeed,
     deleteFeed,
@@ -205,5 +324,8 @@ export function useFeed() {
     setFilter,
     markAsClicked,
     isClicked,
+    importFeeds,
+    exitShareMode,
+    getShareUrl,
   };
 }

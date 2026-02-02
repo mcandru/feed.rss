@@ -4,6 +4,7 @@ import AppHeader from './components/AppHeader.vue'
 import FeedFilters from './components/FeedFilters.vue'
 import ArticleList from './components/ArticleList.vue'
 import ManageFeedsModal from './components/ManageFeedsModal.vue'
+import SharePreview from './components/SharePreview.vue'
 import { useFeed } from './composables/useFeed'
 import type { Feed } from './types'
 
@@ -13,7 +14,8 @@ const {
   activeFilter,
   sources,
   filteredArticles,
-  loadFeeds,
+  isShareMode,
+  initializeApp,
   addFeed,
   deleteFeed,
   refreshFeeds,
@@ -35,13 +37,16 @@ function handleDeleteFeed(url: string) {
 }
 
 onMounted(() => {
-  loadFeeds()
-  refreshFeeds()
+  initializeApp()
 })
 </script>
 
 <template>
-  <div class="min-h-screen">
+  <!-- Share preview mode -->
+  <SharePreview v-if="isShareMode" />
+
+  <!-- Normal app mode -->
+  <div v-else class="min-h-screen">
     <AppHeader
       @manage="openManageModal"
       @refresh="refreshFeeds"
