@@ -9,11 +9,22 @@ import {
 } from "../utils/shareUrl";
 
 // CORS proxies with fallback
-const CORS_PROXIES = [
-  (url: string) => `https://corsproxy.io/?${encodeURIComponent(url)}`,
-  (url: string) =>
-    `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-];
+// Primary: Our own Vercel serverless function (free, reliable, private)
+// Fallback: Free public proxy service as backup
+// Note: For local dev with `npm run dev`, use the fallback since Vite doesn't handle serverless functions
+const isLocalDev =
+  import.meta.env.DEV && window.location.hostname === "localhost";
+const CORS_PROXIES = isLocalDev
+  ? [
+      // In local dev, use public proxy first since /api won't work with plain Vite
+      (url: string) => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+    ]
+  : [
+      // In production, use our serverless function
+      (url: string) => `/api/fetch-rss?url=${encodeURIComponent(url)}`,
+      (url: string) =>
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+    ];
 const STORAGE_KEY = "rss_feeds";
 const CLICKED_LINKS_KEY = "rss_clicked_links";
 

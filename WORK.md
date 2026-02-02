@@ -10,3 +10,4 @@
 8. Moved to tailwind CSS using opencode to do the refactor
 9. Manually added smart defaults for feeds of authors that I commonly read
 10. Used opencode to plan a share feature which allows users to send a shareable link of their feeds to friends. When the friends open the link, they will see the shared feed along with options to import any or all of the feeds shared into their own. The feeds are encoded in the share link: https://opncd.ai/share/CeYjnfcw
+11. Deployed to vercel using opencode to guide. Worked well but found a limitation of the CORS proxy services that I was using.
