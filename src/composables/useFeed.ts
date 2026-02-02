@@ -1,7 +1,11 @@
 import { ref, computed } from 'vue'
 import type { Feed, Article } from '../types'
 
-const CORS_PROXY = 'https://api.allorigins.win/raw?url='
+// CORS proxies with fallback
+const CORS_PROXIES = [
+  (url: string) => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+  (url: string) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+]
 const STORAGE_KEY = 'rss_feeds'
 
 // Single HN feed for exemplar
@@ -99,6 +103,24 @@ export function useFeed() {
     return items
   }
 
+  // Fetch with proxy fallback
+  async function fetchWithProxy(url: string): Promise<string> {
+    for (const proxyFn of CORS_PROXIES) {
+      try {
+        const proxyUrl = proxyFn(url)
+        const response = await fetch(proxyUrl)
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`)
+        }
+        return await response.text()
+      } catch (error) {
+        console.warn(`Proxy failed for ${url}:`, error)
+        continue
+      }
+    }
+    throw new Error('All proxies failed')
+  }
+
   // Refresh all feeds
   async function refreshFeeds() {
     loading.value = true
@@ -106,8 +128,7 @@ export function useFeed() {
 
     const fetchPromises = feeds.value.map(async (feed) => {
       try {
-        const response = await fetch(CORS_PROXY + encodeURIComponent(feed.url))
-        const text = await response.text()
+        const text = await fetchWithProxy(feed.url)
         return parseFeed(text, feed)
       } catch (error) {
         console.error(`Error fetching ${feed.name}:`, error)
